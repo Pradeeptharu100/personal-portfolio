@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../home/home_screen.dart';
-import '../terminal/terminal_screen.dart';
+import '../home/screens/home_screen.dart';
+import '../terminal/screens/terminal_screen.dart';
 
 class AppRoutes {
   AppRoutes._();

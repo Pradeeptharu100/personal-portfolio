@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-
-import '../routes/app_routes.dart';
-import '../shared/widgets/animated_background.dart';
-import '../shared/widgets/responsive_layout.dart';
-import '../themes/app_colors.dart';
-import '../themes/app_style.dart';
-import 'sections/about_section.dart';
-import 'sections/contact_section.dart';
-import 'sections/hero_section.dart';
-import 'sections/projects_section.dart';
+import 'package:personal_portfolio/features/home/components/about_section.dart';
+import 'package:personal_portfolio/features/home/components/contact_section.dart';
+import 'package:personal_portfolio/features/home/components/experience_section.dart';
+import 'package:personal_portfolio/features/home/components/hero_section.dart';
+import 'package:personal_portfolio/features/home/components/projects_section.dart';
+import 'package:personal_portfolio/features/home/providers/home_provider.dart';
+import 'package:personal_portfolio/features/routes/app_routes.dart';
+import 'package:personal_portfolio/features/shared/widgets/animated_background.dart';
+import 'package:personal_portfolio/features/shared/widgets/responsive_layout.dart';
+import 'package:personal_portfolio/features/themes/app_colors.dart';
+import 'package:personal_portfolio/features/themes/app_style.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,27 +23,58 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-  int _selectedIndex = 0;
 
-  final List<String> _sections = ['Home', 'About', 'Projects', 'Contact'];
+  final List<String> _sections = [
+    'Home',
+    'About',
+    'Experience',
+    'Projects',
+    'Contact',
+  ];
+
+  final List<GlobalKey> _sectionKeys = List.generate(5, (_) => GlobalKey());
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
+  void _onScroll() {
+    for (int i = 0; i < _sectionKeys.length; i++) {
+      final key = _sectionKeys[i];
+      final context = key.currentContext;
+      if (context != null) {
+        final box = context.findRenderObject() as RenderBox;
+        final position = box.localToGlobal(Offset.zero);
+        if (position.dy >= -box.size.height / 2 &&
+            position.dy < MediaQuery.of(context).size.height / 2) {
+          // Update provider without rebuilding the entire screen
+          Provider.of<HomeProvider>(this.context, listen: false).setIndex(i);
+          break;
+        }
+      }
+    }
+  }
+
   void _scrollToSection(int index) {
-    setState(() => _selectedIndex = index);
+    Provider.of<HomeProvider>(context, listen: false).setIndex(index);
 
-    final screenHeight = MediaQuery.of(context).size.height;
-    final targetOffset = screenHeight * index;
-
-    _scrollController.animateTo(
-      targetOffset,
-      duration: AppStyle.durationSlow,
-      curve: AppStyle.curveSmooth,
-    );
+    final key = _sectionKeys[index];
+    if (key.currentContext != null) {
+      Scrollable.ensureVisible(
+        key.currentContext!,
+        duration: AppStyle.durationSlow,
+        curve: AppStyle.curveSmooth,
+      );
+    }
   }
 
   @override
@@ -51,14 +84,17 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(
           children: [
             // Main Content
-            CustomScrollView(
+            SingleChildScrollView(
               controller: _scrollController,
-              slivers: [
-                const SliverToBoxAdapter(child: HeroSection()),
-                const SliverToBoxAdapter(child: AboutSection()),
-                const SliverToBoxAdapter(child: ProjectsSection()),
-                const SliverToBoxAdapter(child: ContactSection()),
-              ],
+              child: Column(
+                children: [
+                  HeroSection(key: _sectionKeys[0]),
+                  AboutSection(key: _sectionKeys[1]),
+                  ExperienceSection(key: _sectionKeys[2]),
+                  ProjectsSection(key: _sectionKeys[3]),
+                  ContactSection(key: _sectionKeys[4]),
+                ],
+              ),
             ),
 
             // Navigation
@@ -75,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () => context.push(AppRoutes.terminalPath),
                 icon: const Icon(Icons.terminal),
                 label: const Text('Terminal'),
-                backgroundColor: AppColors.primary,
+                backgroundColor: AppColors.backgroundLight,
               ).animate().fadeIn(delay: 1000.ms).scale(),
             ),
           ],
@@ -114,11 +150,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Row(
-              children: List.generate(
-                _sections.length,
-                (index) => _buildNavItem(index),
-              ),
+            // Only rebuild navigation items when index changes
+            Consumer<HomeProvider>(
+              builder: (context, provider, _) {
+                return Row(
+                  children: List.generate(
+                    _sections.length,
+                    (index) => _buildNavItem(index, provider.selectedIndex),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -126,8 +167,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildNavItem(int index) {
-    final isSelected = _selectedIndex == index;
+  Widget _buildNavItem(int index, int selectedIndex) {
+    final isSelected = selectedIndex == index;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppStyle.spacing16),
@@ -175,22 +216,27 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           boxShadow: AppStyle.shadowLarge,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: List.generate(
-            _sections.length,
-            (index) => _buildMobileNavItem(index),
-          ),
+        child: Consumer<HomeProvider>(
+          builder: (context, provider, _) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(
+                _sections.length,
+                (index) => _buildMobileNavItem(index, provider.selectedIndex),
+              ),
+            );
+          },
         ),
       ).animate().fadeIn().slideY(begin: 1, end: 0),
     );
   }
 
-  Widget _buildMobileNavItem(int index) {
-    final isSelected = _selectedIndex == index;
+  Widget _buildMobileNavItem(int index, int selectedIndex) {
+    final isSelected = selectedIndex == index;
     final icons = [
       Icons.home_rounded,
       Icons.person_rounded,
+      Icons.work_history_rounded,
       Icons.work_rounded,
       Icons.contact_mail_rounded,
     ];

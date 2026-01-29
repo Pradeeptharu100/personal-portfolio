@@ -10,6 +10,7 @@ class ProjectModel {
   final String? imageUrl;
   final ProjectType type;
   final String? company;
+  final String? slug;
   final DateTime? startDate;
   final DateTime? endDate;
 
@@ -25,6 +26,7 @@ class ProjectModel {
     this.imageUrl,
     required this.type,
     this.company,
+    this.slug,
     this.startDate,
     this.endDate,
   });

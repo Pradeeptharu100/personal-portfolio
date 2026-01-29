@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../data/models/project_model.dart';
-import '../data/models/skill_model.dart';
-import '../data/portfolio_data.dart';
-import 'terminal_models.dart';
+import '../../home/data/portfolio_data.dart';
+import '../../home/models/project_model.dart';
+import '../../home/models/skill_model.dart';
+import '../models/terminal_models.dart';
 
-class TerminalController extends ChangeNotifier {
+class TerminalProvider extends ChangeNotifier {
   final List<TerminalCommand> _history = [];
   String _currentDirectory = '~';
   final TextEditingController inputController = TextEditingController();
+  final FocusNode inputFocusNode = FocusNode();
 
   List<TerminalCommand> get history => List.unmodifiable(_history);
   String get currentDirectory => _currentDirectory;
@@ -43,7 +44,7 @@ Location: ${PortfolioData.location}
     ),
   };
 
-  TerminalController() {
+  TerminalProvider() {
     _addWelcomeMessage();
   }
 
@@ -370,6 +371,7 @@ Location: ${PortfolioData.location}
   @override
   void dispose() {
     inputController.dispose();
+    inputFocusNode.dispose();
     super.dispose();
   }
 }

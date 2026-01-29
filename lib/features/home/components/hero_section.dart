@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-import '../../data/portfolio_data.dart';
 import '../../shared/widgets/responsive_layout.dart';
 import '../../themes/app_colors.dart';
 import '../../themes/app_style.dart';
+import '../data/portfolio_data.dart';
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
@@ -75,49 +75,7 @@ class HeroSection extends StatelessWidget {
 
               const SizedBox(height: AppStyle.spacing48),
 
-              // CTA Buttons
-              ResponsiveLayout(
-                    mobile: Column(
-                      children: [
-                        _buildButton(
-                          'View Projects',
-                          Icons.work_rounded,
-                          () {},
-                          isPrimary: true,
-                        ),
-                        const SizedBox(height: AppStyle.spacing16),
-                        _buildButton(
-                          'Contact Me',
-                          Icons.email_rounded,
-                          () {},
-                          isPrimary: false,
-                        ),
-                      ],
-                    ),
-                    desktop: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildButton(
-                          'View Projects',
-                          Icons.work_rounded,
-                          () {},
-                          isPrimary: true,
-                        ),
-                        const SizedBox(width: AppStyle.spacing24),
-                        _buildButton(
-                          'Contact Me',
-                          Icons.email_rounded,
-                          () {},
-                          isPrimary: false,
-                        ),
-                      ],
-                    ),
-                  )
-                  .animate()
-                  .fadeIn(delay: 900.ms, duration: 600.ms)
-                  .scale(begin: const Offset(0.8, 0.8)),
-
-              const Spacer(),
+              // const SizedBox(height: AppStyle.spacing48),
 
               // Scroll indicator
               Column(
@@ -140,37 +98,6 @@ class HeroSection extends StatelessWidget {
                   ),
 
               const SizedBox(height: AppStyle.spacing48),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButton(
-    String label,
-    IconData icon,
-    VoidCallback onPressed, {
-    required bool isPrimary,
-  }) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onPressed,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppStyle.spacing32,
-            vertical: AppStyle.spacing16,
-          ),
-          decoration: isPrimary
-              ? AppStyle.primaryButtonDecoration
-              : AppStyle.outlineButtonDecoration,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, color: AppColors.textPrimary, size: 20),
-              const SizedBox(width: AppStyle.spacing12),
-              Text(label, style: AppStyle.button),
             ],
           ),
         ),

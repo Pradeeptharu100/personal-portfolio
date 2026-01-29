@@ -39,32 +39,55 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
     super.dispose();
   }
 
+  Offset? _mousePosition;
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // Gradient Background
-        Container(
-          decoration: const BoxDecoration(
-            gradient: AppColors.backgroundGradient,
-          ),
-        ),
-        // Animated Particles
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return CustomPaint(
-              painter: ParticlePainter(
-                particles: _particles,
-                animation: _controller.value,
+    return GestureDetector(
+      onPanUpdate: (details) {
+        setState(() {
+          _mousePosition = details.localPosition;
+        });
+      },
+      onPanEnd: (_) => setState(() => _mousePosition = null),
+      child: MouseRegion(
+        onHover: (event) {
+          setState(() {
+            _mousePosition = event.localPosition;
+          });
+        },
+        onExit: (_) {
+          setState(() {
+            _mousePosition = null;
+          });
+        },
+        child: Stack(
+          children: [
+            // Gradient Background
+            Container(
+              decoration: const BoxDecoration(
+                gradient: AppColors.backgroundGradient,
               ),
-              size: Size.infinite,
-            );
-          },
+            ),
+            // Animated Particles
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return CustomPaint(
+                  painter: ParticlePainter(
+                    particles: _particles,
+                    animation: _controller.value,
+                    mousePosition: _mousePosition,
+                  ),
+                  size: Size.infinite,
+                );
+              },
+            ),
+            // Content
+            widget.child,
+          ],
         ),
-        // Content
-        widget.child,
-      ],
+      ),
     );
   }
 }
@@ -76,11 +99,19 @@ class Particle {
   late double speedX;
   late double speedY;
   late Color color;
+  double originalX = 0;
+  double originalY = 0;
 
   Particle() {
+    init();
+  }
+
+  void init() {
     final random = Random();
     x = random.nextDouble();
     y = random.nextDouble();
+    originalX = x;
+    originalY = y;
     size = random.nextDouble() * 3 + 1;
     speedX = (random.nextDouble() - 0.5) * 0.0005;
     speedY = (random.nextDouble() - 0.5) * 0.0005;
@@ -89,7 +120,7 @@ class Particle {
     color = colors[random.nextInt(colors.length)].withOpacity(0.3);
   }
 
-  void update() {
+  void update(Offset? mousePos, Size size) {
     x += speedX;
     y += speedY;
 
@@ -98,19 +129,40 @@ class Particle {
     if (x > 1) x = 0;
     if (y < 0) y = 1;
     if (y > 1) y = 0;
+
+    // Interactive Logic
+    if (mousePos != null) {
+      final dx = x * size.width - mousePos.dx;
+      final dy = y * size.height - mousePos.dy;
+      final distance = sqrt(dx * dx + dy * dy);
+
+      if (distance < 150) {
+        final force = (150 - distance) / 150;
+        final angle = atan2(dy, dx);
+
+        // Push away
+        x += cos(angle) * force * 0.01;
+        y += sin(angle) * force * 0.01;
+      }
+    }
   }
 }
 
 class ParticlePainter extends CustomPainter {
   final List<Particle> particles;
   final double animation;
+  final Offset? mousePosition;
 
-  ParticlePainter({required this.particles, required this.animation});
+  ParticlePainter({
+    required this.particles,
+    required this.animation,
+    this.mousePosition,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     for (var particle in particles) {
-      particle.update();
+      particle.update(mousePosition, size);
 
       final paint = Paint()
         ..color = particle.color
@@ -138,6 +190,26 @@ class ParticlePainter extends CustomPainter {
             Offset(particle.x * size.width, particle.y * size.height),
             Offset(other.x * size.width, other.y * size.height),
             linePaint,
+          );
+        }
+      }
+
+      // Draw connection to mouse
+      if (mousePosition != null) {
+        final distanceToMouse = sqrt(
+          pow((particle.x * size.width) - mousePosition!.dx, 2) +
+              pow((particle.y * size.height) - mousePosition!.dy, 2),
+        );
+
+        if (distanceToMouse < 150) {
+          final mouseLinePaint = Paint()
+            ..color = AppColors.primary.withOpacity(0.2)
+            ..strokeWidth = 1.0;
+
+          canvas.drawLine(
+            Offset(particle.x * size.width, particle.y * size.height),
+            mousePosition!,
+            mouseLinePaint,
           );
         }
       }

@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../../themes/app_colors.dart';
 import '../../themes/app_style.dart';
 
 class GlassCard extends StatelessWidget {
@@ -40,20 +39,23 @@ class GlassCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: borderRadius ?? AppStyle.borderRadiusLarge,
         border: Border.all(
-          color: borderColor ?? AppColors.borderPrimary,
+          color: borderColor ?? Colors.white.withOpacity(0.1),
           width: borderWidth,
         ),
-        boxShadow: boxShadow ?? AppStyle.shadowMedium,
+        boxShadow: boxShadow ?? [],
       ),
       child: ClipRRect(
         borderRadius: borderRadius ?? AppStyle.borderRadiusLarge,
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
             decoration: BoxDecoration(
-              gradient: gradient ?? AppColors.glassGradient,
+              color: Colors.black.withOpacity(
+                0.2,
+              ), // Very transparent dark base
+              borderRadius: borderRadius ?? AppStyle.borderRadiusLarge,
             ),
-            padding: padding ?? const EdgeInsets.all(AppStyle.spacing24),
+            padding: padding ?? const EdgeInsets.all(AppStyle.spacing16),
             child: child,
           ),
         ),

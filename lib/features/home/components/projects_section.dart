@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../data/models/project_model.dart';
-import '../../data/portfolio_data.dart';
 import '../../shared/widgets/glass_card.dart';
 import '../../shared/widgets/hover_tooltip.dart';
+import '../../shared/widgets/project_icon.dart';
 import '../../shared/widgets/responsive_layout.dart';
 import '../../themes/app_colors.dart';
 import '../../themes/app_style.dart';
+import '../data/portfolio_data.dart';
+import '../models/project_model.dart';
 
 class ProjectsSection extends StatelessWidget {
   const ProjectsSection({super.key});
@@ -18,7 +19,7 @@ class ProjectsSection extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
-      constraints: BoxConstraints(minHeight: screenHeight),
+      constraints: BoxConstraints(minHeight: screenHeight * 0.8),
       padding: EdgeInsets.symmetric(
         horizontal: ResponsiveValue<double>(
           mobile: AppStyle.spacing24,
@@ -99,135 +100,142 @@ class ProjectsSection extends StatelessWidget {
     int index,
   ) {
     return HoverTooltip(
-          message: 'Click to view details',
-          child: MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () => _showProjectDetails(context, project),
-              child: GlassCard(
-                margin: const EdgeInsets.only(bottom: AppStyle.spacing24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      message: 'Click to view details',
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () => _showProjectDetails(context, project),
+          child: GlassCard(
+            margin: const EdgeInsets.only(bottom: AppStyle.spacing24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Project Icon and Type Badge Row
+                Row(
                   children: [
-                    // Project Type Badge
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppStyle.spacing12,
-                        vertical: AppStyle.spacing4,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: _getGradientForType(project.type),
-                        borderRadius: AppStyle.borderRadiusSmall,
-                      ),
-                      child: Text(
-                        project.type.displayName,
-                        style: AppStyle.caption.copyWith(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.w600,
+                    ProjectIcon(size: 32),
+                    const SizedBox(width: AppStyle.spacing12),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppStyle.spacing12,
+                          vertical: AppStyle.spacing4,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: _getGradientForType(project.type),
+                          borderRadius: AppStyle.borderRadiusSmall,
+                        ),
+                        child: Text(
+                          project.company != null
+                              ? '${project.type.displayName} | ${project.company}'
+                              : project.type.displayName,
+                          style: AppStyle.caption.copyWith(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
-
-                    const SizedBox(height: AppStyle.spacing16),
-
-                    // Project Name
-                    Text(
-                      project.name,
-                      style: AppStyle.h6,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-
-                    if (project.company != null) ...[
-                      const SizedBox(height: AppStyle.spacing4),
-                      Text(
-                        project.company!,
-                        style: AppStyle.bodySmall.copyWith(
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ],
-
-                    const SizedBox(height: AppStyle.spacing12),
-
-                    // Description
-                    Text(
-                      project.description,
-                      style: AppStyle.bodySmall,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-
-                    const SizedBox(height: AppStyle.spacing16),
-
-                    // Technologies
-                    Wrap(
-                      spacing: AppStyle.spacing8,
-                      runSpacing: AppStyle.spacing8,
-                      children: project.technologies.take(4).map((tech) {
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppStyle.spacing8,
-                            vertical: AppStyle.spacing4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.surfaceDark,
-                            borderRadius: AppStyle.borderRadiusSmall,
-                            border: Border.all(
-                              color: AppColors.primary.withOpacity(0.3),
-                              width: 1,
-                            ),
-                          ),
-                          child: Text(
-                            tech,
-                            style: AppStyle.caption.copyWith(
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-
-                    if (project.technologies.length > 4) ...[
-                      const SizedBox(height: AppStyle.spacing8),
-                      Text(
-                        '+${project.technologies.length - 4} more',
-                        style: AppStyle.caption.copyWith(
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                    ],
-
-                    const SizedBox(height: AppStyle.spacing16),
-
-                    // Links
-                    Row(
-                      children: [
-                        if (project.playStoreUrl != null)
-                          _buildLinkButton(
-                            Icons.shop,
-                            'Play Store',
-                            () => _launchUrl(project.playStoreUrl!),
-                          ),
-                        if (project.githubUrl != null) ...[
-                          const SizedBox(width: AppStyle.spacing8),
-                          _buildLinkButton(
-                            Icons.code,
-                            'GitHub',
-                            () => _launchUrl(project.githubUrl!),
-                          ),
-                        ],
-                      ],
                     ),
                   ],
                 ),
-              ),
+
+                const SizedBox(height: AppStyle.spacing16),
+
+                // Project Name
+                Text(
+                  project.name,
+                  style: AppStyle.h6,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+
+                if (project.company != null) ...[
+                  const SizedBox(height: AppStyle.spacing4),
+                  Text(
+                    project.company!,
+                    style: AppStyle.bodySmall.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+
+                const SizedBox(height: AppStyle.spacing12),
+
+                // Description
+                Text(
+                  project.description,
+                  style: AppStyle.bodySmall,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+
+                const SizedBox(height: AppStyle.spacing16),
+
+                // Technologies
+                Wrap(
+                  spacing: AppStyle.spacing8,
+                  runSpacing: AppStyle.spacing8,
+                  children: project.technologies.take(4).map((tech) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppStyle.spacing8,
+                        vertical: AppStyle.spacing4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceDark,
+                        borderRadius: AppStyle.borderRadiusSmall,
+                        border: Border.all(
+                          color: AppColors.primary.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Text(
+                        tech,
+                        style: AppStyle.caption.copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+
+                if (project.technologies.length > 4) ...[
+                  const SizedBox(height: AppStyle.spacing8),
+                  Text(
+                    '+${project.technologies.length - 4} more',
+                    style: AppStyle.caption.copyWith(
+                      color: AppColors.textTertiary,
+                    ),
+                  ),
+                ],
+
+                const SizedBox(height: AppStyle.spacing16),
+
+                // Links
+                Row(
+                  children: [
+                    if (project.playStoreUrl != null)
+                      _buildLinkButton(
+                        Icons.shop,
+                        'Play Store',
+                        () => _launchUrl(project.playStoreUrl!),
+                      ),
+                    if (project.githubUrl != null) ...[
+                      const SizedBox(width: AppStyle.spacing8),
+                      _buildLinkButton(
+                        Icons.code,
+                        'GitHub',
+                        () => _launchUrl(project.githubUrl!),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
             ),
           ),
-        )
-        .animate()
-        .fadeIn(delay: (200 + index * 100).ms)
-        .slideY(begin: 0.2, end: 0);
+        ),
+      ),
+    ).animate().fadeIn(delay: (200 + index * 100).ms).slideY(begin: 0.2, end: 0);
   }
 
   Widget _buildLinkButton(IconData icon, String label, VoidCallback onTap) {
@@ -261,14 +269,28 @@ class ProjectsSection extends StatelessWidget {
   }
 
   LinearGradient _getGradientForType(ProjectType type) {
+    // Return simpler gradients or solid-like gradients as per user request
     switch (type) {
       case ProjectType.professional:
-        return AppColors.primaryGradient;
+        return LinearGradient(
+          colors: [
+            AppColors.primary.withOpacity(0.2),
+            AppColors.primary.withOpacity(0.1),
+          ],
+        );
       case ProjectType.freelance:
-        return AppColors.accentGradient;
+        return LinearGradient(
+          colors: [
+            AppColors.secondary.withOpacity(0.2),
+            AppColors.secondary.withOpacity(0.1),
+          ],
+        );
       case ProjectType.personal:
-        return const LinearGradient(
-          colors: [AppColors.secondary, AppColors.accent],
+        return LinearGradient(
+          colors: [
+            AppColors.accent.withOpacity(0.2),
+            AppColors.accent.withOpacity(0.1),
+          ],
         );
     }
   }
