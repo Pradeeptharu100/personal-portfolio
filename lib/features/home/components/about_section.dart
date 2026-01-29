@@ -45,7 +45,6 @@ class AboutSection extends StatelessWidget {
           ).animate().fadeIn(delay: 200.ms).scale(),
 
           const SizedBox(height: AppStyle.spacing48),
-
           // Skills
           Text(
             'Skills',
@@ -53,11 +52,6 @@ class AboutSection extends StatelessWidget {
           ).animate().fadeIn(delay: 400.ms).slideX(begin: -0.2, end: 0),
 
           const SizedBox(height: AppStyle.spacing24),
-
-          _buildSkillsGrid(context),
-
-          const SizedBox(height: AppStyle.spacing24),
-
           _buildSkillsGrid(context),
         ],
       ),

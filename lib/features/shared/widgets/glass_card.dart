@@ -39,7 +39,7 @@ class GlassCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: borderRadius ?? AppStyle.borderRadiusLarge,
         border: Border.all(
-          color: borderColor ?? Colors.white.withOpacity(0.1),
+          color: borderColor ?? Colors.white.withValues(alpha: 0.1),
           width: borderWidth,
         ),
         boxShadow: boxShadow ?? [],
@@ -50,9 +50,7 @@ class GlassCard extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(
-                0.2,
-              ), // Very transparent dark base
+              color: Colors.black.withValues(alpha: 0.05),
               borderRadius: borderRadius ?? AppStyle.borderRadiusLarge,
             ),
             padding: padding ?? const EdgeInsets.all(AppStyle.spacing16),

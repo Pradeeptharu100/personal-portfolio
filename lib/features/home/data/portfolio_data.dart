@@ -79,6 +79,29 @@ class PortfolioData {
       proficiency: 0.85,
     ),
 
+    // Payment & Tools
+    const SkillModel(
+      name:
+          'Payment Gateways (eSewa, Khalti, Connect IPS, Stripe, PayPal, Razorpay)',
+      category: SkillCategory.tools,
+      proficiency: 0.85,
+    ),
+    const SkillModel(
+      name: 'Git (GitHub, GitLab)',
+      category: SkillCategory.tools,
+      proficiency: 0.85,
+    ),
+    const SkillModel(
+      name: 'Trello, Meister Task',
+      category: SkillCategory.tools,
+      proficiency: 0.8,
+    ),
+    const SkillModel(
+      name: 'Agile Environments',
+      category: SkillCategory.tools,
+      proficiency: 0.8,
+    ),
+
     // Backend & API
     const SkillModel(
       name: 'Node js',
@@ -112,30 +135,6 @@ class PortfolioData {
       category: SkillCategory.backend,
       proficiency: 0.85,
     ),
-
-    // Payment & Tools
-    const SkillModel(
-      name:
-          'Payment Gateways (eSewa, Khalti, Connect IPS, Stripe, PayPal, Razorpay)',
-      category: SkillCategory.tools,
-      proficiency: 0.85,
-    ),
-    const SkillModel(
-      name: 'Git (GitHub, GitLab)',
-      category: SkillCategory.tools,
-      proficiency: 0.85,
-    ),
-    const SkillModel(
-      name: 'Trello, Meister Task',
-      category: SkillCategory.tools,
-      proficiency: 0.8,
-    ),
-    const SkillModel(
-      name: 'Agile Environments',
-      category: SkillCategory.tools,
-      proficiency: 0.8,
-    ),
-
     // Advanced Features
     const SkillModel(
       name: 'Server-Driven UI (SDUI)',

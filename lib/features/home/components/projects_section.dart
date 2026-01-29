@@ -355,6 +355,10 @@ class ProjectsSection extends StatelessWidget {
                       if (project.playStoreUrl != null)
                         Expanded(
                           child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryDark,
+                              foregroundColor: Colors.white,
+                            ),
                             onPressed: () => _launchUrl(project.playStoreUrl!),
                             icon: const Icon(Icons.shop),
                             label: const Text('Play Store'),

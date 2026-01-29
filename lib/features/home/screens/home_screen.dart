@@ -56,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
         final position = box.localToGlobal(Offset.zero);
         if (position.dy >= -box.size.height / 2 &&
             position.dy < MediaQuery.of(context).size.height / 2) {
-          // Update provider without rebuilding the entire screen
           Provider.of<HomeProvider>(this.context, listen: false).setIndex(i);
           break;
         }
