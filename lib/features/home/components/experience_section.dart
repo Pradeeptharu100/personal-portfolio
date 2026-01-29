@@ -6,7 +6,7 @@ import '../../shared/widgets/responsive_layout.dart';
 import '../../themes/app_colors.dart';
 import '../../themes/app_style.dart';
 import '../data/portfolio_data.dart';
-import '../models/skill_model.dart'; // Keep for WorkExperience type
+import '../models/skill_model.dart';
 
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});

@@ -81,6 +81,16 @@ class PortfolioData {
 
     // Backend & API
     const SkillModel(
+      name: 'Node js',
+      category: SkillCategory.backend,
+      proficiency: 0.25,
+    ),
+    const SkillModel(
+      name: 'Supabase',
+      category: SkillCategory.backend,
+      proficiency: 0.85,
+    ),
+    const SkillModel(
       name: 'REST API Integration',
       category: SkillCategory.backend,
       proficiency: 0.9,
@@ -90,20 +100,23 @@ class PortfolioData {
       category: SkillCategory.backend,
       proficiency: 0.85,
     ),
+
     const SkillModel(
-      name: 'Authentication (Google, Facebook)',
+      name: 'Authentication (Google, Apple, Phone, Email)',
       category: SkillCategory.backend,
       proficiency: 0.85,
     ),
     const SkillModel(
-      name: 'Offline Storage (SQLite, Hive)',
+      name:
+          'Offline Storage (SQLite, Hive, Shared Preferences, Local Storage, Secure Storage)',
       category: SkillCategory.backend,
       proficiency: 0.85,
     ),
 
     // Payment & Tools
     const SkillModel(
-      name: 'Payment Gateways (eSewa, Khalti, Connect IPS)',
+      name:
+          'Payment Gateways (eSewa, Khalti, Connect IPS, Stripe, PayPal, Razorpay)',
       category: SkillCategory.tools,
       proficiency: 0.85,
     ),
@@ -156,6 +169,36 @@ class PortfolioData {
       slug: 'cosmos-admin',
     ),
     const ProjectModel(
+      id: 'cosmos_astrology_app',
+      name: 'Cosmos Astrology',
+      description:
+          'A modern astrology application providing personalized horoscopes, consultations, and reports with secure online payments.',
+      longDescription:
+          'Cosmos Astrology is a full-featured astrology platform built with Flutter. '
+          'It offers daily horoscopes, kundli generation, astrology consultations, '
+          'and personalized reports. The app uses GetX for state management, Hive for '
+          'local caching, Firebase for authentication and real-time data, and supports '
+          'multiple payment gateways including eSewa, Khalti, and PayPal for seamless '
+          'in-app purchases and consultations.',
+      technologies: [
+        'Flutter',
+        'GetX',
+        'Hive',
+        'Firebase',
+        'Astrology',
+        'eSewa',
+        'Khalti',
+        'PayPal',
+        'In-App Payments',
+        'Real-time Data',
+      ],
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.cosmosNepal.cosmos&hl=en',
+      type: ProjectType.freelance,
+      slug: 'cosmos-astrology',
+    ),
+
+    const ProjectModel(
       id: 'chow_chow_restaurant',
       name: 'Chow Chow Restaurant',
       description:
@@ -168,8 +211,10 @@ class PortfolioData {
         'Analytics',
         'Real-time Updates',
       ],
-      playStoreUrl: '',
-      type: ProjectType.freelance,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.chowchowespress.chowchowespress&hl=en',
+      type: ProjectType.professional,
+      company: 'Delta-v Logic and Solution',
       slug: 'chow-chow-restaurant',
     ),
     const ProjectModel(
@@ -180,8 +225,10 @@ class PortfolioData {
       longDescription:
           'Customer-facing food delivery app with location tracking, social login, order placement, and real-time delivery status updates.',
       technologies: ['Flutter', 'Google Maps', 'Social Auth', 'Food Delivery'],
-      playStoreUrl: '',
-      type: ProjectType.freelance,
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.chowchowespress.chowchowespress&hl=en',
+      type: ProjectType.professional,
+      company: 'Delta-v Logic and Solution',
       slug: 'chow-chow-user',
     ),
     const ProjectModel(
@@ -197,9 +244,10 @@ class PortfolioData {
         'Multiple Payments',
         'Crypto Integration',
       ],
-      playStoreUrl: '',
-      type: ProjectType.freelance,
-      company: 'Majjako',
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.milehigh.majjakodeals&hl=en',
+      type: ProjectType.professional,
+      company: 'Delta-v Logic and Solution',
       slug: 'majjako-deals',
     ),
     const ProjectModel(
@@ -215,9 +263,10 @@ class PortfolioData {
         'Real-time Tracking',
         'Multi-role System',
       ],
-      playStoreUrl: '',
-      type: ProjectType.freelance,
-      company: 'Majjako',
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.mydvls.majjakologistics&hl=en',
+      type: ProjectType.professional,
+      company: 'Delta-v Logic and Solution',
       slug: 'majjako-logistics',
     ),
     const ProjectModel(
@@ -232,9 +281,10 @@ class PortfolioData {
         'Meditation',
         'Yoga Courses',
       ],
-      playStoreUrl: '',
-      type: ProjectType.freelance,
-      company: 'Jeevan Vigyan',
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.jeevanvigyan.mobileapp&hl=en',
+      type: ProjectType.professional,
+      company: 'Dallo Tech',
       slug: 'jeevan-vigyan',
     ),
     const ProjectModel(
@@ -245,7 +295,8 @@ class PortfolioData {
       longDescription:
           'Comprehensive educational platform with live examinations, interactive quizzes, video lectures, and performance analytics for students.',
       technologies: ['Flutter', 'Education', 'Live Exams', 'Video Content'],
-      playStoreUrl: '',
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.dallotech.eshiksha&hl=en',
       type: ProjectType.professional,
       company: 'Dallo Tech',
       slug: 'e-shiksha',
@@ -278,7 +329,8 @@ class PortfolioData {
         'E-commerce Integration',
         'Gadget Tracking',
       ],
-      playStoreUrl: '',
+      playStoreUrl:
+          'https://play.google.com/store/apps/details?id=com.mobile.price_mobile_app&hl=en',
       type: ProjectType.personal,
     ),
   ];
